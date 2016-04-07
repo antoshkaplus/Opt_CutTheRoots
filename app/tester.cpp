@@ -3,10 +3,6 @@
 
 
 #include "util.hpp"
-#include "score.hpp"
-#include "board_v1.hpp"
-#include "naive_search.hpp"
-#include "beam_search.hpp"
 
 int main(int argc, const char * argv[]) {
     auto input = "./../temp/input.txt";

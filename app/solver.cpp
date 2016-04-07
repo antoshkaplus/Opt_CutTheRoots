@@ -6,19 +6,27 @@
 /// -s : score function probably
 
 #include "util.hpp"
-#include "score.hpp"
-#include "board_v1.hpp"
-#include "naive_search.hpp"
-#include "beam_search.hpp"
-#include "fragile_mirrors.hpp"
+#include "cut_roots.hpp"
 
+std::vector<int> CutTheRoots::makeCuts(int num_plants, 
+                                       const vector<int>& int_points, 
+                                       const vector<int>& int_roots) {
+    Problem pr(num_plants, int_points, int_roots);
+    const auto& pp = pr.points;
+    
+    vector<Index> ps(num_plants);
+    iota(ps.begin(), ps.end(), 0);
+    sort(ps.begin(), ps.end(), [&](const Index& i_0, const Index& i_1) {
+        return pp[i_0].x < pp[i_1].x;
+    });
+    
+    vector<Point> res;  
+    for (Index i = 0; i < pp.size()-1; ++i) {
+        int x = (pp[ps[i]].x + pp[ps[i+1]].x) / 2;
+        res.push_back({x, 1});
+        res.push_back({x, 2});
+    }
+    return ToVectorInt(res);
 
-std::vector<int> FragileMirrors::destroy(const std::vector<std::string> & board) {
-    Board_v1 b(board);
-    Score_v1<Board_v1> s(board.size());
-    BeamSearch<decltype(b), decltype(s)> solver;
-    solver.set_beam_width(1000);
-    //NaiveSearch<decltype(b), decltype(s)> solver;
-    auto w = solver.Destroy(b, s);
-    return ToSolution(w.CastHistory());
+    
 }

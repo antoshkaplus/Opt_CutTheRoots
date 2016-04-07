@@ -11,6 +11,7 @@
 #include "ant/core/core.hpp"
 
 #include "cut_roots.hpp"
+#include "util.hpp"
 
 using namespace std;
 
@@ -51,11 +52,10 @@ int main(int argc, const char * argv[]) {
         }
     }
 
-    vector<string> board = ReadBoard(*in);
-    
+    Problem pr = ReadBoard(*in);
     auto startTime = std::chrono::high_resolution_clock::now();
-    FragileMirrors fm;
-    auto v = fm.destroy(board);
+    CutTheRoots cr;
+    auto v = cr.makeCuts(pr.num_plants, pr.points, pr.roots);
     auto endTime = std::chrono::high_resolution_clock::now();
     if (timed) {
         auto bound = std::chrono::seconds(10);
@@ -63,29 +63,6 @@ int main(int argc, const char * argv[]) {
             return 0;
         }
     }
-    PrintSolution(*out, v);
+    Print(*out, v);
     return 0;
 }
-
-
-int NP;
-cin >> NP;
-
-int Npoints;
-cin >> Npoints;
-vector<int> points(Npoints);
-getVector(points);
-
-int Nroots;
-cin >> Nroots;
-vector<int> roots(Nroots);
-getVector(roots);
-
-CutTheRoots cr;
-vector<int> ret = cr.makeCuts(NP, points, roots);
-
-cout << ret.size() << endl;
-for (int i = 0; i < ret.size(); ++i) {
-    cout << ret[i] << endl;
-}
-cout.flush();
