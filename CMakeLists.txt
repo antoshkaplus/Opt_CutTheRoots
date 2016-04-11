@@ -38,8 +38,8 @@ find_library(ANT_LIBRARY ant)
 add_library(cutroots ${SOURCE_FILES} ${HEADER_FILES})
 target_link_libraries(cutroots ${ANT_LIBRARY})
 
-add_executable(solver "app/main_template.cpp" "app/solver.cpp")
+add_executable(solver "app/main_template.cpp" "app/par_lines.cpp")
 target_link_libraries(solver cutroots)
 
-add_executable(tester "app/tester.cpp")
+add_executable(tester "app/tester.cpp" "app/par_lines.cpp")
 target_link_libraries(tester cutroots)

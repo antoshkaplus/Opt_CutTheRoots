@@ -2,6 +2,7 @@
 #pragma once
 
 #include <vector>
+#include <fstream>
 
 #include "ant/geometry/d2.hpp"
 
@@ -11,14 +12,21 @@ using ant::geometry::d2::i::Segment;
 using namespace std;
 
 struct Root {
-    int plant;
-    int end;
+    Index plant;
+    Index end;
+    
+    Root() {}
+    
+    Root(Index plant, Index end) 
+        : plant(plant), end(end) {}
 };
 
 struct Problem {
     Count num_plants;
     vector<Point> points;
     vector<Root> roots;
+    
+    Problem() : num_plants(0) {}
     
     Problem(Count num_plants, const vector<int>& ps, const vector<int>& rs) {
         this->num_plants = num_plants;
@@ -33,6 +41,8 @@ struct Problem {
 
 
 Problem ReadProblem(istream& in);
-vector<int> ToVectorInt(vector<Point>& points);
-void Print(ostream& out, vector<int>& vs);
-void PrintSolution(ostream& out, vector<Segment>& sol);
+void PrintProblem(ostream& out, const Problem& problem);
+vector<Int> ToVectorInt(const vector<Point>& points);
+vector<Int> ToVectorInt(const vector<Root>& roots);
+void Print(ostream& out, const vector<Int>& vs);
+void PrintSolution(ostream& out, const vector<Segment>& sol);

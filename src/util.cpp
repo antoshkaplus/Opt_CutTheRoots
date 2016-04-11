@@ -1,20 +1,29 @@
 
 #include "util.hpp"
 
-vector<int> ToVectorInt(vector<Point>& ps) {
+vector<int> ToVectorInt(const vector<Point>& ps) {
     vector<int> res;
-    for (Point& p : ps) {
+    for (const Point& p : ps) {
         res.push_back(p.x);
         res.push_back(p.y);
     }
     return res;
 }
 
+vector<Int> ToVectorInt(const vector<Root>& roots) {
+    vector<int> res;
+    for (const Root& r : roots) {
+        res.push_back(r.plant);
+        res.push_back(r.end);
+    }
+    return res;
+}
+
 Problem ReadProblem(istream& in) {
     Problem pr;
-    cin >> pr.num_plants;
+    in >> pr.num_plants;
     int num_point_coords;
-    cin >> num_point_coords;
+    in >> num_point_coords;
     auto& ps = pr.points;
     ps.resize(num_point_coords/2);
     for (int i = 0; i < ps.size(); ++i) {
@@ -22,7 +31,7 @@ Problem ReadProblem(istream& in) {
         in >> ps[i].y;
     }
     int num_root_inds;
-    cin >> num_root_inds;
+    in >> num_root_inds;
     auto& rs = pr.roots;
     rs.resize(num_root_inds/2);
     for (int i = 0; i < rs.size(); ++i) {
@@ -32,7 +41,15 @@ Problem ReadProblem(istream& in) {
     return pr;
 }
 
-void PrintSolution(ostream& out, vector<Segment>& sol) {
+void PrintProblem(ostream& out, const Problem& pr) {
+    out << pr.num_plants << endl;
+    auto ps = ToVectorInt(pr.points);
+    Print(out, ps);
+    auto rs = ToVectorInt(pr.roots);
+    Print(out, rs);
+}
+
+void PrintSolution(ostream& out, const vector<Segment>& sol) {
     out << 2*sol.size();
     for (auto& s : sol) {
         out << s.fst.x << endl;
@@ -43,7 +60,7 @@ void PrintSolution(ostream& out, vector<Segment>& sol) {
     out.flush();
 }
 
-void Print(ostream& out, vector<int>& vs) {
+void Print(ostream& out, const vector<int>& vs) {
     out << vs.size() << endl;
     for (auto& v : vs) {
         out << v << endl;

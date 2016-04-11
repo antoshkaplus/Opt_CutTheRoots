@@ -21,7 +21,7 @@ std::vector<int> CutTheRoots::makeCuts(int num_plants,
     });
     
     vector<Point> res;  
-    for (Index i = 0; i < pp.size()-1; ++i) {
+    for (Index i = 0; i < ps.size()-1; ++i) {
         int x = (pp[ps[i]].x + pp[ps[i+1]].x) / 2;
         res.push_back({x, 1});
         res.push_back({x, 2});

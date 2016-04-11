@@ -2,8 +2,9 @@
 /// -i, -o
 /// input and output file paths
 /// input and output format are described in problem statement
-/// -m : mehtod. for now just NaiveSearch
-/// -s : score function probably
+/// 
+/// 
+
 
 #include <chrono>
 #include <fstream>
@@ -19,13 +20,15 @@ int main(int argc, const char * argv[]) {
     ant::command_line_parser parser(argv, argc);
     string input, output;
     
-    ifstream fin(input);
-    ofstream fout(output);
+    ifstream fin;
+    ofstream fout;
     
     istream *in;
     ostream *out;
     
     bool timed = false;
+    bool print_input = false;
+    
     if (parser.exists("t")) {
         timed = true;
     }
@@ -33,6 +36,11 @@ int main(int argc, const char * argv[]) {
     if (parser.exists("d")) {
         in = &cin;
         out = &cout;
+        if (parser.exists("i")) {
+            print_input = true;
+            input = parser.getValue("i");
+            fout.open(input);
+        }
     } else {
         if (parser.exists("i")) {
             input = parser.getValue("i");
@@ -52,10 +60,15 @@ int main(int argc, const char * argv[]) {
         }
     }
 
-    Problem pr = ReadBoard(*in);
+    Problem pr = ReadProblem(*in);
+    if (print_input) {
+        PrintProblem(fout, pr);
+    }
     auto startTime = std::chrono::high_resolution_clock::now();
     CutTheRoots cr;
-    auto v = cr.makeCuts(pr.num_plants, pr.points, pr.roots);
+    auto ps = ToVectorInt(pr.points);
+    auto rs = ToVectorInt(pr.roots);
+    auto v = cr.makeCuts(pr.num_plants, ps, rs);
     auto endTime = std::chrono::high_resolution_clock::now();
     if (timed) {
         auto bound = std::chrono::seconds(10);
